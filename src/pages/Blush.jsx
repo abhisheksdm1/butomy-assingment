@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 const fetchProducts = async () => {
   const response = await axios.get(
-    "http://makeup-api.herokuapp.com/api/v1/products.json"
+    "https://makeup-api.herokuapp.com/api/v1/products.json"
   );
   const data = await response.data;
   return data;

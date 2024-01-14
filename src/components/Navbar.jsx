@@ -12,7 +12,7 @@ export default function Navbar({ onChildClick }) {
   const handleMutation = async () => {
     try {
       const response = await fetch(
-        `http://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
+        `https://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
       );
       const data = await response.json();
 
