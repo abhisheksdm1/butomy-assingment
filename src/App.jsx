@@ -1,6 +1,7 @@
 import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Homelayout, Landing, Error } from "./pages";
+import Blush from "./pages/Blush";
 
 const router = createBrowserRouter([
   {
@@ -13,8 +14,8 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: "register",
-        // element: <Register />,
+        path: "blush",
+        element: <Blush />,
       },
     ],
   },

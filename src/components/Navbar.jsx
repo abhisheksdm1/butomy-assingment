@@ -1,8 +1,26 @@
+import { Link } from "react-router-dom";
+import axios from "axios";
 import backgroundImage from "../assets/finalbutomybackground.jpeg";
 import { FaShoppingCart } from "react-icons/fa";
-export default function Navbar() {
+import { useState } from "react";
+import PropTypes from "prop-types";
+
+export default function Navbar({ onChildClick }) {
+  const [search, setSearch] = useState("");
+  const [list, setList] = useState([]);
+
+  const handleMutation = async () => {
+    const response = await axios.get(
+      `http://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
+    );
+    setList(response.data);
+    const data = response.data;
+    onChildClick(data);
+  };
+
   return (
     <div>
+      {list}
       <nav
         style={{
           backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url(${backgroundImage})`,
@@ -10,9 +28,9 @@ export default function Navbar() {
           backgroundPosition: "center",
           width: "100%",
         }}
-        className="h-screen bg-cover bg-center bg-red-500 w-full p-5 flex flex-col gap-10"
+        className="h-screen bg-cover bg-center bg-red-500 w-full p-5 flex flex-col item-center  gap-10"
       >
-        <div className="flex gap-5 w-full h-10">
+        <div className="flex justify-center gap-5 w-full h-10">
           <h1
             style={{
               color: "#ef4444",
@@ -25,10 +43,14 @@ export default function Navbar() {
           </h1>
           <input
             type="text"
-            className="bg-transparent border border-white rounded-xl p-3 w-2/5 h-7 m-1 grow"
+            className="bg-transparent text-white border border-white rounded-xl p-3 w-3/5 h-7 m-1  sm:w-4/5 md:w-4/5 lg:w-4/5 xl:w-4/5"
             placeholder="Search"
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="flex ">
+          <button onClick={handleMutation} className="flext item-center p-1">
+            Search
+          </button>
+          <div className="flex pr-2">
             <FaShoppingCart className="flex-none text-white text-3xl pt-2" />
             <span
               style={{ borderRadius: "50%" }}
@@ -38,15 +60,20 @@ export default function Navbar() {
             </span>
           </div>
         </div>
-        <div className="flex gap-10">
+        <div className="flex justify-center gap-10">
           <div className=" flex justify-center items-center w-40 h-16 h- bg-red-500">
-            <h2 className=" text-3xl text-black">Blush</h2>
+            <Link to="/blush">
+              <h2 className=" text-3xl text-black">Blush</h2>
+            </Link>
           </div>
+
           <div className=" flex justify-center items-center w-40 h-16 h- bg-red-500">
-            <h2 className=" text-3xl text-black">Brozen</h2>
+            <Link to="/brozen">
+              <h2 className=" text-3xl text-black">Brozen</h2>
+            </Link>
           </div>
         </div>
-        <div className="flex gap-10">
+        <div className="flex justify-center gap-10">
           <div className=" flex justify-center items-center w-40 h-16 h- bg-red-500">
             <h2 className=" text-3xl text-black">Eyebrow</h2>
           </div>
@@ -54,7 +81,7 @@ export default function Navbar() {
             <h2 className=" text-3xl text-black">Eyeliner</h2>
           </div>
         </div>
-        <div className="flex gap-10">
+        <div className="flex justify-center gap-10">
           <div className=" flex justify-center items-center w-40 h-16 h- bg-red-500">
             <h2 className=" text-3xl text-black">Eyeshadow</h2>
           </div>
@@ -62,7 +89,7 @@ export default function Navbar() {
             <h2 className=" text-3xl text-black">Foundation</h2>
           </div>
         </div>
-        <div className="flex gap-10">
+        <div className="flex justify-center gap-10">
           <div className=" flex justify-center items-center w-40 h-16 h- bg-red-500">
             <h2 className=" text-3xl text-black">Lip liner</h2>
           </div>
@@ -70,7 +97,7 @@ export default function Navbar() {
             <h2 className=" text-3xl text-black">Lip stick</h2>
           </div>
         </div>
-        <div className="flex gap-10">
+        <div className="flex justify-center gap-10">
           <div className=" flex justify-center items-center w-40 h-16 h- bg-red-500">
             <h2 className=" text-3xl text-black">Mascara</h2>
           </div>
@@ -82,3 +109,7 @@ export default function Navbar() {
     </div>
   );
 }
+
+Navbar.propTypes = {
+  onChildClick: PropTypes.func.isRequired,
+};
