@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import backgroundImage from "../assets/finalbutomybackground.jpeg";
 import { FaShoppingCart } from "react-icons/fa";
 import { useState } from "react";
@@ -7,15 +7,22 @@ import PropTypes from "prop-types";
 
 export default function Navbar({ onChildClick }) {
   const [search, setSearch] = useState("");
-  const [list, setList] = useState([]);
+  const [list] = useState([]);
 
   const handleMutation = async () => {
-    const response = await axios.get(
-      `http://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
-    );
-    setList(response.data);
-    const data = response.data;
-    onChildClick(data);
+    try {
+      const response = await fetch(
+        `http://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
+      );
+      const data = await response.json();
+
+      // Ensure onChildClick receives an array
+      onChildClick(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle error if needed
+    }
+    setSearch("");
   };
 
   return (
@@ -45,6 +52,7 @@ export default function Navbar({ onChildClick }) {
             type="text"
             className="bg-transparent text-white border border-white rounded-xl p-3 w-3/5 h-7 m-1  sm:w-4/5 md:w-4/5 lg:w-4/5 xl:w-4/5"
             placeholder="Search"
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <button onClick={handleMutation} className="flext item-center p-1">

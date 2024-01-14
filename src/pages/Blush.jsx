@@ -35,7 +35,7 @@ export default function Blush() {
       .get(
         `http://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
       )
-      .then((response) => setList(response.data));
+      .then((response) => setList(response.data), setSearch(""));
 
     // e.preventDefault();
 
@@ -93,6 +93,7 @@ export default function Blush() {
             type="text"
             className="bg-black text-white border border-white rounded-xl p-3 w-3/5 h-13 m-1  sm:w-4/5 md:w-4/5 lg:w-4/5 xl:w-4/5"
             placeholder="Search"
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <button onClick={handleMutation}>Search</button>
