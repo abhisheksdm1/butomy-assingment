@@ -33,7 +33,7 @@ export default function Blush() {
   const handleMutation = async () => {
     return await axios
       .get(
-        `http://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
+        `https://makeup-api.herokuapp.com/api/v1/products.json?brand=${search}`
       )
       .then((response) => setList(response.data), setSearch(""));
 
