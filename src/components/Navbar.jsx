@@ -58,7 +58,10 @@ export default function Navbar({ onChildClick }) {
           <button onClick={handleMutation} className="flext item-center p-1">
             Search
           </button>
-          <div className="flex pr-2">
+          <div
+            className="flex pr-2"
+            onClick={() => window.my_modal_4.showModal()}
+          >
             <FaShoppingCart className="flex-none text-white text-3xl pt-2" />
             <span
               style={{ borderRadius: "50%" }}
@@ -114,6 +117,66 @@ export default function Navbar({ onChildClick }) {
           </div>
         </div>
       </nav>
+      <dialog id="my_modal_4" className="modal bg-black-500">
+        <form method="dialog" className="modal-box  max-w-5xl">
+          <h3 className="font-bold text-lg">Order Summary</h3>
+          <br />
+          {/* {totalCost > 0 &&
+            menuItems
+              .filter((item) => item.total > 0)
+              .map((list, index) => (
+                <div key={index} className="">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td className="text-left p-3" colSpan={3}>
+                          <div className="flex mb-3 td1">
+                            <span style={{ width: "100px" }}>
+                              {list.name} :
+                            </span>
+                          </div>
+                        </td>
+                        <td className="text-left">
+                          <div className="flex mb-3">
+                            <span>{list.total}</span>
+                          </div>
+                        </td>
+                        <td className="text-left">
+                          <div className="flex mb-3">
+                            <h1
+                              className="bg-[#4f46e5] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
+                              onClick={() => handleIncrement1(list.id)}
+                            >
+                              <FaPlus />
+                            </h1>
+                            <h1
+                              className="bg-[#ef4444] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
+                              onClick={() => handleDecrement1(list.id)}
+                            >
+                              <FaMinus />
+                            </h1>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              ))} */}
+          <br />
+          <div>{/* <p>Total (INR) :{totalCost}</p> */}</div>
+          <div className="modal-action flex mr-5 justify-end">
+            {/* if there is a button, it will close the modal */}
+            {/* <button
+              onClick={checkoutHandler}
+              className="btn bg-[#4f46e5] mr-5 rounded-lg pt-1 pb-1 pl-3 pr-3 mr-5 text-white"
+            >
+              SAVE AND CHECKOUT
+            </button> */}
+            <button className="btn text-violet-600">CANCLE</button>
+            <br />
+          </div>
+        </form>
+      </dialog>
     </div>
   );
 }
