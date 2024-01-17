@@ -4,10 +4,12 @@ import backgroundImage from "../assets/finalbutomybackground.jpeg";
 import { FaShoppingCart } from "react-icons/fa";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 export default function Navbar({ onChildClick }) {
   const [search, setSearch] = useState("");
   const [list] = useState([]);
+  const countCart = useSelector((state) => state.ui.cartCount);
 
   const handleMutation = async () => {
     try {
@@ -67,7 +69,7 @@ export default function Navbar({ onChildClick }) {
               style={{ borderRadius: "50%" }}
               className="bg-red-500 h-7 p-1 relative right-2 bottom-2"
             >
-              0
+              {countCart}
             </span>
           </div>
         </div>
@@ -117,7 +119,7 @@ export default function Navbar({ onChildClick }) {
           </div>
         </div>
       </nav>
-      <dialog id="my_modal_4" className="modal bg-black-500">
+      <dialog id="my_modal_4" className="modal ">
         <form method="dialog" className="modal-box  max-w-5xl">
           <h3 className="font-bold text-lg">Order Summary</h3>
           <br />

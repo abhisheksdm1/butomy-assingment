@@ -1,15 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
-const uiSlice =createSlice({
-    name:'ui',
-    initialState: { cartIsVisible :false},
-    reducers:{
-        toggle(state){
-            state.cartIsVisible=!state.cartIsVisible
-        }
-    }
-})
+const uiSlice = createSlice({
+  name: "ui",
+  initialState: { items: [], cartCount: 0 },
+  reducers: {
+    cart(state, action) {
+      const id = action.payload;
+      const existingItem = state.items.find((item) => item.id === id);
+      if (!existingItem) {
+        state.items.push({
+          id: id,
+        });
+      } else {
+        state.cartCount = state.cartCount + 1;
+      }
+    },
+  },
+});
 
-export const uiActions=uiSlice.actions; 
+export const uiActions = uiSlice.actions;
 
-export default uiSlice
+export default uiSlice;

@@ -1,33 +1,52 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+// import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Navbar } from "../components";
-
-const fetchProducts = async () => {
-  const response = await axios.get(
-    "https://makeup-api.herokuapp.com/api/v1/products.json"
-  );
-  const data = await response.data;
-  return data;
-};
+import { uiActions } from "../components/store/ui-slice";
+import { useDispatch } from "react-redux";
+// const fetchProducts = async () => {
+//   const response = await axios.get(
+//     "https://makeup-api.herokuapp.com/api/v1/products.json"
+//   );
+//   const data = await response.data;
+//   return data;
+// };
 
 export default function Landing() {
   const [dataFromChild, setDataFromChild] = useState([]);
   const [toggle, setToggle] = useState(false);
-  const { isPending, error, data } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
-  });
+  const dispatch = useDispatch();
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://makeup-api.herokuapp.com/api/v1/products.json"
+        );
+        const data = response.data;
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
 
-  if (isPending) return "Loading...";
+    fetchProducts();
+  }, []);
 
-  if (error) return "An error has occurred: " + error.message;
+  // const { isPending, error, data } = useQuery({
+  //   queryKey: ["products"],
+  //   queryFn: fetchProducts,
+  // });
+
+  // if (isPending) return "Loading...";
+
+  // if (error) return "An error has occurred: " + error.message;
 
   const handleChildClick = (data1) => {
     setDataFromChild(data1);
     setToggle(true);
   };
-  const reducedList = data.slice(0, 51);
+  const reducedList = products.slice(0, 51);
 
   const popedoneList = reducedList.splice(1, 50);
 
@@ -37,6 +56,12 @@ export default function Landing() {
       (_, index) => array.slice(index * chunkSize, (index + 1) * chunkSize)
     );
   }
+
+  // redux
+  const cartValue = (id) => {
+    // alert("hiii");
+    dispatch(uiActions.cart(id));
+  };
 
   return (
     <div>
@@ -79,7 +104,10 @@ export default function Landing() {
                       )
                     )}
                   </div>
-                  <button className="bg-red-500 text-white absolute bottom-0">
+                  <button
+                    className="bg-red-500 text-white absolute bottom-0"
+                    onClick={cartValue(item.id)}
+                  >
                     Add to Cart
                   </button>
                 </div>

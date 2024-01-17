@@ -7,10 +7,12 @@ const queryClient = new QueryClient();
 import { Provider } from "react-redux";
 import store from "./components/store/store.js";
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
+
         <App />
       </Provider>
     </QueryClientProvider>{" "}
