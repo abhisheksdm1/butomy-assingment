@@ -1,46 +1,35 @@
 import { useEffect, useState } from "react";
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Navbar } from "../components";
 import { uiActions } from "../components/store/ui-slice";
 import { useDispatch } from "react-redux";
-// const fetchProducts = async () => {
-//   const response = await axios.get(
-//     "https://makeup-api.herokuapp.com/api/v1/products.json"
-//   );
-//   const data = await response.data;
-//   return data;
-// };
+const fetchProducts = async () => {
+  const response = await axios.get(
+    "https://makeup-api.herokuapp.com/api/v1/products.json"
+  );
+  const data = await response.data;
+  return data;
+};
 
 export default function Landing() {
   const [dataFromChild, setDataFromChild] = useState([]);
+  const [products, setProducts] = useState([]);
   const [toggle, setToggle] = useState(false);
   const dispatch = useDispatch();
-  const [products, setProducts] = useState([]);
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          "https://makeup-api.herokuapp.com/api/v1/products.json"
-        );
-        const data = response.data;
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
+    if (data) {
+      setProducts(data);
+    }
+  }, [data]);
+  if (isPending) return "Loading...";
 
-    fetchProducts();
-  }, []);
-
-  // const { isPending, error, data } = useQuery({
-  //   queryKey: ["products"],
-  //   queryFn: fetchProducts,
-  // });
-
-  // if (isPending) return "Loading...";
-
-  // if (error) return "An error has occurred: " + error.message;
+  if (error) return "An error has occurred: " + error.message;
 
   const handleChildClick = (data1) => {
     setDataFromChild(data1);
@@ -58,9 +47,9 @@ export default function Landing() {
   }
 
   // redux
-  const cartValue = (id) => {
+  const cartValue = (id, name, price) => {
     // alert("hiii");
-    dispatch(uiActions.cart(id));
+    dispatch(uiActions.cart({ id, name, price }));
   };
 
   return (
@@ -106,7 +95,7 @@ export default function Landing() {
                   </div>
                   <button
                     className="bg-red-500 text-white absolute bottom-0"
-                    onClick={cartValue(item.id)}
+                    onClick={() => cartValue(item.id, item.name, item.price)}
                   >
                     Add to Cart
                   </button>

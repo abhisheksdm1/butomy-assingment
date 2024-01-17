@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
 // import axios from "axios";
 import backgroundImage from "../assets/finalbutomybackground.jpeg";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 export default function Navbar({ onChildClick }) {
   const [search, setSearch] = useState("");
-  const [list] = useState([]);
+  // const [list] = useState([]);
   const countCart = useSelector((state) => state.ui.cartCount);
-
+  const cartItems = useSelector((state) => state.ui.items);
+  console.log("countCart", countCart);
+  console.log("countCart", cartItems);
   const handleMutation = async () => {
     try {
       const response = await fetch(
@@ -29,7 +31,6 @@ export default function Navbar({ onChildClick }) {
 
   return (
     <div>
-      {list}
       <nav
         style={{
           backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url(${backgroundImage})`,
@@ -123,47 +124,42 @@ export default function Navbar({ onChildClick }) {
         <form method="dialog" className="modal-box  max-w-5xl">
           <h3 className="font-bold text-lg">Order Summary</h3>
           <br />
-          {/* {totalCost > 0 &&
-            menuItems
-              .filter((item) => item.total > 0)
-              .map((list, index) => (
-                <div key={index} className="">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td className="text-left p-3" colSpan={3}>
-                          <div className="flex mb-3 td1">
-                            <span style={{ width: "100px" }}>
-                              {list.name} :
-                            </span>
-                          </div>
-                        </td>
-                        <td className="text-left">
-                          <div className="flex mb-3">
-                            <span>{list.total}</span>
-                          </div>
-                        </td>
-                        <td className="text-left">
-                          <div className="flex mb-3">
-                            <h1
-                              className="bg-[#4f46e5] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
-                              onClick={() => handleIncrement1(list.id)}
-                            >
-                              <FaPlus />
-                            </h1>
-                            <h1
-                              className="bg-[#ef4444] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
-                              onClick={() => handleDecrement1(list.id)}
-                            >
-                              <FaMinus />
-                            </h1>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              ))} */}
+          {cartItems.map((list, index) => (
+            <div key={index} className="">
+              <table>
+                <tbody>
+                  <tr>
+                    <td className="text-left p-3" colSpan={3}>
+                      <div className="flex mb-3 td1">
+                        <span style={{ width: "100px" }}>{list.name} :</span>
+                      </div>
+                    </td>
+                    <td className="text-left">
+                      <div className="flex mb-3">
+                        <span>{list.price}</span>
+                      </div>
+                    </td>
+                    <td className="text-left">
+                      <div className="flex mb-3">
+                        <h1
+                          className="bg-[#4f46e5] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
+                          // onClick={() => handleIncrement1(list.id)}
+                        >
+                          <FaPlus />
+                        </h1>
+                        <h1
+                          className="bg-[#ef4444] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
+                          // onClick={() => handleDecrement1(list.id)}
+                        >
+                          <FaMinus />
+                        </h1>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ))}
           <br />
           <div>{/* <p>Total (INR) :{totalCost}</p> */}</div>
           <div className="modal-action flex mr-5 justify-end">

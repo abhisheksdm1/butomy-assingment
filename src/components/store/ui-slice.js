@@ -5,14 +5,19 @@ const uiSlice = createSlice({
   initialState: { items: [], cartCount: 0 },
   reducers: {
     cart(state, action) {
-      const id = action.payload;
-      const existingItem = state.items.find((item) => item.id === id);
+      const newItems = action.payload;
+      const existingItem = state.items.find((item) => item.id === newItems.id);
       if (!existingItem) {
-        state.items.push({
-          id: id,
-        });
-      } else {
         state.cartCount = state.cartCount + 1;
+        state.items.push({
+          id: newItems.id,
+          name: newItems.name,
+          price: parseFloat(newItems.price),
+        });
+        console.log(state.items);
+      } else {
+        existingItem.price =
+          parseFloat(existingItem.price) + parseFloat(newItems.price); // Convert to number
       }
     },
   },
