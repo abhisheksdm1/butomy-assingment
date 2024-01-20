@@ -5,14 +5,18 @@ import { FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { uiActions } from "../components/store/ui-slice";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar({ onChildClick }) {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  // const [list] = useState([]);
+  const dispatch = useDispatch();
   const countCart = useSelector((state) => state.ui.cartCount);
   const cartItems = useSelector((state) => state.ui.items);
-  console.log("countCart", countCart);
-  console.log("countCart", cartItems);
+  const totalPrice = useSelector((state) => state.ui.totalPrice);
+
   const handleMutation = async () => {
     try {
       const response = await fetch(
@@ -29,6 +33,16 @@ export default function Navbar({ onChildClick }) {
     setSearch("");
   };
 
+  function handleIncrement(id, name, price) {
+    dispatch(uiActions.cart({ id, name, price }));
+  }
+  function handleDecrement(id, price) {
+    dispatch(uiActions.removeCart({ id, price }));
+  }
+  function checkoutHandler() {
+    navigate("/checkout");
+    dispatch(uiActions.closeCart());
+  }
   return (
     <div>
       <nav
@@ -143,13 +157,21 @@ export default function Navbar({ onChildClick }) {
                       <div className="flex mb-3">
                         <h1
                           className="bg-[#4f46e5] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
-                          // onClick={() => handleIncrement1(list.id)}
+                          onClick={() =>
+                            handleIncrement(
+                              list.id,
+                              list.name,
+                              list.standarprice
+                            )
+                          }
                         >
                           <FaPlus />
                         </h1>
                         <h1
                           className="bg-[#ef4444] rounded-sm pt-2 pb-2 pl-5 pr-5 mr-5 text-white"
-                          // onClick={() => handleDecrement1(list.id)}
+                          onClick={() =>
+                            handleDecrement(list.id, list.standarprice)
+                          }
                         >
                           <FaMinus />
                         </h1>
@@ -161,15 +183,16 @@ export default function Navbar({ onChildClick }) {
             </div>
           ))}
           <br />
+          <h2>total price - {totalPrice}</h2>
           <div>{/* <p>Total (INR) :{totalCost}</p> */}</div>
           <div className="modal-action flex mr-5 justify-end">
             {/* if there is a button, it will close the modal */}
-            {/* <button
+            <button
               onClick={checkoutHandler}
               className="btn bg-[#4f46e5] mr-5 rounded-lg pt-1 pb-1 pl-3 pr-3 mr-5 text-white"
             >
               SAVE AND CHECKOUT
-            </button> */}
+            </button>
             <button className="btn text-violet-600">CANCLE</button>
             <br />
           </div>
