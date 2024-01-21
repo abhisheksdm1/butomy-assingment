@@ -14,6 +14,9 @@ const fetchProducts = async () => {
 export default function Blush() {
   const [search, setSearch] = useState("");
   const [list, setList] = useState([]);
+  const [brandValue, setBrandValue] = useState("All");
+  const [categoryValue, setCategoryValue] = useState("All");
+
   const { isPending, error, data } = useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
@@ -54,7 +57,38 @@ export default function Blush() {
   const reducedList = data.slice(0, 51);
 
   const popedoneList = reducedList.splice(1, 50);
+  const categoryList = [...popedoneList];
+  categoryList.unshift({
+    product_type: "blush",
+    category: "All",
+  });
 
+  const brandList = [...popedoneList];
+  brandList.unshift({
+    product_type: "blush",
+    brand: "All",
+  });
+
+  const handleChange = () => {
+    // const selectedValue = e.target.value;
+    setCategoryValue("All");
+    setBrandValue("All");
+  };
+
+  console.log("category", categoryValue);
+  console.log("brand", brandValue);
+
+  function handleCategory(e) {
+    const abc = e.target.value;
+    setCategoryValue(abc);
+    axios
+      .get(
+        `https://makeup-api.herokuapp.com/api/v1/products.json?category=${abc}`
+      )
+      .then((response) => setList(response.data));
+  }
+  console.log("aaa", categoryValue);
+  console.log(list);
   function chunkArray(array, chunkSize) {
     return Array.from(
       { length: Math.ceil(array.length / chunkSize) },
@@ -98,22 +132,44 @@ export default function Blush() {
           />
           <button onClick={handleMutation}>Search</button>
           <div>
-            <h2 className="text-3xl">Tag List</h2>
-            <select name="cars" id="cars">
-              <option value="volvo">All</option>
-              <option value="saab">Saab</option>
-              <option value="mercedes">Mercedes</option>
-              <option value="audi">Audi</option>
+            <h2 className="text-3xl">category</h2>
+            <select
+              name="cars"
+              id="cars"
+              value={categoryValue}
+              onChange={(e) => handleCategory(e)}
+            >
+              {[
+                ...new Set(
+                  categoryList
+                    .filter((item) => item.product_type === "blush")
+                    .map((item) => item.category)
+                ),
+              ].map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
-            <h2 className="text-3xl">Brand List</h2>
-            <select name="cars" id="cars">
-              <option value="volvo">All</option>
-              <option value="saab">Saab</option>
-              <option value="mercedes">Mercedes</option>
-              <option value="audi">Audi</option>
-            </select>
+            {/* <h2 className="text-3xl">Brand List</h2>
+            <select
+              name="cars"
+              id="cars"
+              value={brandValue}
+              onChange={(e) => setBrandValue(e.target.value)}
+            >
+              {brandList
+                .filter((item) => item.product_type === "blush")
+                .map((item, index) => (
+                  <option key={index} value={item.brand}>
+                    {item.brand}
+                  </option>
+                ))}
+            </select>*/}
           </div>
-          <button className="bg-red-500 mb-3">Clear Filter</button>
+          <button className="bg-red-500 mb-3" onClick={handleChange}>
+            Clear Filter
+          </button>
         </div>
         {list.length === 0 ? (
           <div className="flex flex-wrap justify-start bg-black-500 w-screen h-screen ">
